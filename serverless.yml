@@ -1,10 +1,10 @@
-service: basic-serverless-lambda
+service: device-calibration
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: python3.10
   stage: dev
   region: us-west-2
 # Check
 functions:
-  hello:
-    handler: src/handler.generateRandomNumber
+  process:
+    handler: src/handler.lambda_handler
