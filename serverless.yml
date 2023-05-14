@@ -1,4 +1,4 @@
-service: device-calibration
+service: device-calibrations
 provider:
   name: aws
   runtime: python3.9
