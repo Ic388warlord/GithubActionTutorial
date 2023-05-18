@@ -37,7 +37,7 @@ resources:
         Integration:
           IntegrationHttpMethod: POST
           Type: AWS_PROXY
-          Uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${self:service}-${self:provider.stage}-process:${self:provider.version}/invocations"
+          Uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${self:service}-${opt:stage, self:provider.stage}-process:${self:provider.version}/invocations"
 
     ApiGatewayDeployment:
       Type: AWS::ApiGateway::Deployment
