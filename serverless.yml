@@ -23,21 +23,25 @@ resources:
       Properties:
         RestApiId:
           Ref: ApiGatewayRestApi
+        ParentId:
+          Fn::GetAtt:
+            - ApiGatewayRestApi
+            - RootResourceId
         PathPart: devicecalibration
 
-    DeviceCalibrationMethod:
+    ApiGatewayMethod:
       Type: AWS::ApiGateway::Method
       Properties:
-        HttpMethod: POST
-        ResourceId:
-          Ref: DeviceCalibrationResource
         RestApiId:
           Ref: ApiGatewayRestApi
+        ResourceId:
+          Ref: ApiGatewayResource
+        HttpMethod: POST
         AuthorizationType: NONE
         Integration:
           IntegrationHttpMethod: POST
           Type: AWS_PROXY
-          Uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${self:service}-${opt:stage, self:provider.stage}-process:${self:provider.version}/invocations"
+          Uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${self:service}-${self:provider.stage}-process:${self:provider.version}/invocations"
 
     ApiGatewayDeployment:
       Type: AWS::ApiGateway::Deployment
