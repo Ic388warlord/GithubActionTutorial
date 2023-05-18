@@ -9,3 +9,50 @@ provider:
 functions:
   process:
     handler: src/handler.lambda_handler
+
+plugins:
+  - serverless-aws-documentation
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: Team2TestDeviceCalibrationGithubAction
+
+    DeviceCalibrationResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        PathPart: devicecalibration
+
+    DeviceCalibrationMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        HttpMethod: POST
+        ResourceId:
+          Ref: DeviceCalibrationResource
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        AuthorizationType: NONE
+        Integration:
+          IntegrationHttpMethod: POST
+          Type: AWS_PROXY
+          Uri:
+            Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${process.Arn}/invocations"
+
+    ApiGatewayDeployment:
+      Type: AWS::ApiGateway::Deployment
+      Properties:
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    ApiGatewayStage:
+      Type: AWS::ApiGateway::Stage
+      Properties:
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        DeploymentId:
+          Ref: ApiGatewayDeployment
+        StageName: ${self:provider.stage}
