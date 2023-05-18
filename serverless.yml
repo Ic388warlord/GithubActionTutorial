@@ -10,9 +10,6 @@ functions:
   process:
     handler: src/handler.lambda_handler
 
-plugins:
-  - serverless-aws-documentation
-
 resources:
   Resources:
     ApiGatewayRestApi:
