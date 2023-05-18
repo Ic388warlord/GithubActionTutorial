@@ -6,10 +6,13 @@ provider:
   role: arn:aws:iam::697978558555:role/Device-Calibration-Data-Process-Role
   stage: dev
   region: us-west-2
-# Check
+
 functions:
   process:
     handler: src/handler.lambda_handler
+
+custom:
+  apiGatewayUri: "arn:aws:apigateway:${self:provider.region}:lambda:path/2015-03-31/functions/${self:service}-${self:provider.stage}-process/invocations"
 
 resources:
   Resources:
@@ -18,7 +21,7 @@ resources:
       Properties:
         Name: Team2TestDeviceCalibrationGithubAction
 
-    DeviceCalibrationResource:
+    ApiGatewayResource:
       Type: AWS::ApiGateway::Resource
       Properties:
         RestApiId:
@@ -41,7 +44,7 @@ resources:
         Integration:
           IntegrationHttpMethod: POST
           Type: AWS_PROXY
-          Uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${self:service}-${self:provider.stage}-process:${self:provider.version}/invocations"
+          Uri: ${self:custom.apiGatewayUri}
 
     ApiGatewayDeployment:
       Type: AWS::ApiGateway::Deployment
