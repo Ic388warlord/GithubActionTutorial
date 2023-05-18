@@ -1,4 +1,4 @@
-service: device-calibrations
+service: team2-device-calibrations
 
 provider:
   name: aws
