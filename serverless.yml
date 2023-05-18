@@ -37,7 +37,14 @@ resources:
         Integration:
           IntegrationHttpMethod: POST
           Type: AWS_PROXY
-          Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${process.Arn}/invocations"
+          Uri:
+            Fn::Join:
+              - ''
+              - - 'arn:aws:apigateway:'
+                - Ref: AWS::Region
+                - ':lambda:path/2015-03-31/functions/'
+                - !GetAtt process.Arn
+                - '/invocations'
 
     ApiGatewayDeployment:
       Type: AWS::ApiGateway::Deployment
